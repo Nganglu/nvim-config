@@ -64,7 +64,7 @@ return {
 		dependencies = { "saadparwaiz1/cmp_luasnip" },
 		keys = {
 			{
-				"<leader><leader>;",
+				"<C-]>",
 				function()
 					require("luasnip").jump(1)
 				end,
@@ -74,7 +74,7 @@ return {
 				silent = true,
 			},
 			{
-				"<leader><leader>,",
+				"<C-[>",
 				function()
 					require("luasnip").jump(-1)
 				end,
