@@ -9,6 +9,7 @@ map("n", "<leader>pV", vim.cmd.Sex, { desc = "Show Split PWD" })
 
 --Terminal
 map("n", "<leader>t", vim.cmd.FloatermToggle, { desc = "Terminal" })
+map("n", "<C-t>", vim.cmd.FloatermToggle, { desc = "Terminal" })
 
 --Package Manager
 map("n", "<leader>L", vim.cmd.Lazy, { desc = "Lazy" })
