@@ -16,6 +16,7 @@ return {
           --"rust_analyzer", **Configured by Rustacean**
           "jedi_language_server", --Python
           "jdtls",           --Java
+          "emmet_ls",
         },
       })
     end,
@@ -39,6 +40,7 @@ return {
       --lspconfig.rust_analyzer.setup({})
       lspconfig.jedi_language_server.setup({})
       lspconfig.jdtls.setup({})
+      lspconfig.emmet_ls.setup({})
 
       vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "Hover (info)" })
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
