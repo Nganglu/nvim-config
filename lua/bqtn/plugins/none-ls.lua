@@ -5,14 +5,17 @@ return {
       local null_ls = require("null-ls")
       null_ls.setup({
         sources = {
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.prettierd,
-          null_ls.builtins.formatting.clang_format,
-          null_ls.builtins.formatting.google_java_format,
+          null_ls.builtins.formatting.stylua,                             -- Lua
+          null_ls.builtins.formatting.prettierd,                          -- Web
+          null_ls.builtins.formatting.black.with({
+            args = { "--line-length", "79", "--fast" }, -- Adjust arguments as per your preference
+          }),    -- Python
+          null_ls.builtins.formatting.clang_format,                       -- C/C#/C++
+          null_ls.builtins.formatting.google_java_format,                 -- Java
         },
       })
 
-      vim.keymap.set("n", "<leader>=", vim.lsp.buf.format, {desc="auto-format"})
+      vim.keymap.set("n", "<leader>=", vim.lsp.buf.format, { desc = "auto-format" })
     end,
   },
   {

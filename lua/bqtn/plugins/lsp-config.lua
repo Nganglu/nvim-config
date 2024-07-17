@@ -10,13 +10,13 @@ return {
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "lua_ls",
-          "denols",
-          "tsserver",
+          "denols",                 -- Deno(js/ts)
+          "tsserver",               -- Typescript
+          "lua_ls",                 -- Lua
+          "jedi_language_server",   -- Python
+          "jdtls",                  -- Java
+          "emmet_ls",               -- Emmet
           --"rust_analyzer", **Configured by Rustacean**
-          "jedi_language_server", --Python
-          "jdtls",           --Java
-          "emmet_ls",
         },
       })
     end,
@@ -25,7 +25,6 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({})
       local nvim_lsp = require("lspconfig")
       nvim_lsp.denols.setup({
         on_attach = on_attach,
@@ -38,9 +37,20 @@ return {
         single_file_support = false,
       })
       --lspconfig.rust_analyzer.setup({})
+      lspconfig.lua_ls.setup({})
       lspconfig.jedi_language_server.setup({})
       lspconfig.jdtls.setup({})
       lspconfig.emmet_ls.setup({})
+      lspconfig.pyright.setup({
+        settings = {
+          python = {
+            formatting = {
+              provider = "black",
+              blackPath = "black",
+            }
+          }
+        }
+      })
 
       vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "Hover (info)" })
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })

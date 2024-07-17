@@ -6,6 +6,14 @@ opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
 
+opt.autoindent = true
+opt.smartindent = true
+opt.preserveindent = true
+
+-- White Spaces
+opt.list = true
+opt.listchars = { tab = "▸ ", trail = "·" }
+
 -- Movement
 opt.whichwrap:append("<>hl")
 
