@@ -11,7 +11,7 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "denols",                 -- Deno(js/ts)
-          "tsserver",               -- Typescript
+          "ts_ls",                  -- Typescript
           "lua_ls",                 -- Lua
           "jedi_language_server",   -- Python
           "jdtls",                  -- Java
@@ -25,23 +25,43 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       local lspconfig = require("lspconfig")
-      local nvim_lsp = require("lspconfig")
-      nvim_lsp.denols.setup({
+      local on_attach = function(client, bufnr)
+        vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "Hover (info)" })
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
+        vim.keymap.set({ "n", "v" }, "<leader>c", vim.lsp.buf.code_action, { desc = "Code Action" })
+      end
+
+      lspconfig.denols.setup({
         on_attach = on_attach,
-        root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
+        root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
       })
 
-      nvim_lsp.tsserver.setup({
+      lspconfig.ts_ls.setup({
         on_attach = on_attach,
-        root_dir = nvim_lsp.util.root_pattern("package.json"),
+        root_dir = lspconfig.util.root_pattern("package.json"),
         single_file_support = false,
       })
+
       --lspconfig.rust_analyzer.setup({})
-      lspconfig.lua_ls.setup({})
-      lspconfig.jedi_language_server.setup({})
-      lspconfig.jdtls.setup({})
-      lspconfig.emmet_ls.setup({})
+      --
+      lspconfig.lua_ls.setup({
+        on_attach = on_attach,
+      })
+
+      lspconfig.jedi_language_server.setup({
+        on_attach = on_attach,
+      })
+
+      lspconfig.jdtls.setup({
+        on_attach = on_attach,
+      })
+
+      lspconfig.emmet_ls.setup({
+        on_attach = on_attach,
+      })
+
       lspconfig.pyright.setup({
+        on_attach = on_attach,
         settings = {
           python = {
             formatting = {
@@ -51,10 +71,6 @@ return {
           }
         }
       })
-
-      vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "Hover (info)" })
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
-      vim.keymap.set({ "n", "v" }, "<leader>c", vim.lsp.buf.code_action, { desc = "Code Action" })
     end,
   },
 }

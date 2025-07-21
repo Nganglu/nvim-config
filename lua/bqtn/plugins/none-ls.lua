@@ -7,11 +7,13 @@ return {
         sources = {
           null_ls.builtins.formatting.stylua,                             -- Lua
           null_ls.builtins.formatting.prettierd,                          -- Web
-          null_ls.builtins.formatting.black.with({
-            args = { "--line-length", "79", "--fast" }, -- Adjust arguments as per your preference
-          }),    -- Python
           null_ls.builtins.formatting.clang_format,                       -- C/C#/C++
           null_ls.builtins.formatting.google_java_format,                 -- Java
+          null_ls.builtins.formatting.black.with({
+            args = { "--line-length", "79", "--fast" }, -- Adjust arguments as per your preference
+          }),                                                             -- Python
+          null_ls.builtins.diagnostics.mypy,
+          null_ls.builtins.diagnostics.ruff,
         },
       })
 
