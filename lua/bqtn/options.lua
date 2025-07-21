@@ -28,6 +28,3 @@ opt.ignorecase = true
 opt.scrolloff = 1
 opt.autoread = true
 opt.backspace = { "indent", "eol", "start" }
-
--- Theme
-vim.cmd.colorscheme("catppuccin")

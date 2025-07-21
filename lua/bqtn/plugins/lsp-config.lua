@@ -1,3 +1,4 @@
+-- ~/.config/nvim/lua/bqtn/plugins/lsp-config.lua
 return {
   {
     "williamboman/mason.nvim",
@@ -7,16 +8,19 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig",
+    },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "denols",                 -- Deno(js/ts)
-          "ts_ls",                  -- Typescript
-          "lua_ls",                 -- Lua
-          "jedi_language_server",   -- Python
-          "jdtls",                  -- Java
-          "emmet_ls",               -- Emmet
-          --"rust_analyzer", **Configured by Rustacean**
+          "lua_ls",
+          "tsserver",
+          "denols",
+          "jedi_language_server",
+          "jdtls",
+          "emmet_ls",
         },
       })
     end,
@@ -25,52 +29,31 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       local lspconfig = require("lspconfig")
-      local on_attach = function(client, bufnr)
-        vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "Hover (info)" })
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
-        vim.keymap.set({ "n", "v" }, "<leader>c", vim.lsp.buf.code_action, { desc = "Code Action" })
+      local util = require("lspconfig.util")
+
+      local on_attach = function(_, bufnr)
+        local map = function(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+        end
+        map("n", "<leader>h", vim.lsp.buf.hover, "Hover")
+        map("n", "gd", vim.lsp.buf.definition, "Go to Definition")
+        map({ "n", "v" }, "<leader>c", vim.lsp.buf.code_action, "Code Action")
       end
 
-      lspconfig.denols.setup({
+      lspconfig.lua_ls.setup({ on_attach = on_attach })
+      lspconfig.tsserver.setup({
         on_attach = on_attach,
-        root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-      })
-
-      lspconfig.ts_ls.setup({
-        on_attach = on_attach,
-        root_dir = lspconfig.util.root_pattern("package.json"),
+        root_dir = util.root_pattern("package.json"),
         single_file_support = false,
       })
-
-      --lspconfig.rust_analyzer.setup({})
-      --
-      lspconfig.lua_ls.setup({
+      lspconfig.denols.setup({
         on_attach = on_attach,
+        root_dir = util.root_pattern("deno.json", "deno.jsonc"),
       })
-
-      lspconfig.jedi_language_server.setup({
-        on_attach = on_attach,
-      })
-
-      lspconfig.jdtls.setup({
-        on_attach = on_attach,
-      })
-
-      lspconfig.emmet_ls.setup({
-        on_attach = on_attach,
-      })
-
-      lspconfig.pyright.setup({
-        on_attach = on_attach,
-        settings = {
-          python = {
-            formatting = {
-              provider = "black",
-              blackPath = "black",
-            }
-          }
-        }
-      })
+      lspconfig.jedi_language_server.setup({ on_attach = on_attach })
+      lspconfig.jdtls.setup({ on_attach = on_attach })
+      lspconfig.emmet_ls.setup({ on_attach = on_attach })
     end,
   },
 }
+
